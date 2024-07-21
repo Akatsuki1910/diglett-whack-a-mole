@@ -24,19 +24,29 @@ public class HammerTest : MonoBehaviour
     {
         Vector3 localPos = OVRInput.GetLocalControllerPosition(OVRInput.Controller.LTouch);
         Vector3 lpos = TrackingSpace.TransformPoint(localPos);
-
+        
+        Quaternion localRot = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTouch);
+        // Vector3 lrot = TrackingSpace.TransformDirection(localRot.eulerAngles);
+        
+        
         transform.position = lpos;
+        transform.rotation = TrackingSpace.rotation * localRot;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
         KeyText.text = "hazureta" + collision.gameObject.tag;
         GetComponent<Renderer>().material.color = Color.blue;
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
         KeyText.text = "hit" + collision.gameObject.tag;
         GetComponent<Renderer>().material.color = Color.red;
+
+        if (collision.gameObject.tag == "Mole")
+        {
+            Destroy(collision.gameObject);
+        }
     }
 }
